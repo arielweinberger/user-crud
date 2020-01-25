@@ -1,10 +1,57 @@
 # User CRUD Operations
+## Endpoints
+You can find a [Postman collection](postman_collection.json) export in this repository for ease of testing.
 
-## Setup
+|        Endpoint        |     Description     |
+|:----------------------:|:-------------------:|
+| GET /user              |    Get all users    |
+| GET /user/:id          |    Get user by ID   |
+| POST /user             |     Create user     |
+| DELETE /user/:id       |  Delete user by ID  |
+| PATCH /user/:id/avatar | Set user avatar URL |
 
-## Running
+Example request for user creation:
+```js
+// POST http://localhost:3000/user
+
+{
+  "firstName": "Ariel",
+  "lastName": "Weinberger",
+  "username": "arielweinberger",
+  "password": "supersecret"
+}
+```
+
+Example request for avatar setting:
+```js
+// PATCH http://localhost:3000/5e2cd0a54cf1b50012ed30c6/avatar
+
+{
+  "url": "hhttps://via.placeholder.com/150x150.png"
+}
+```
+
+## Running the application
+### Development mode
+The application expects a MongoDB database to be running on port 27017.
+```bash
+npm install
+npm run start:dev
+```
+
+### Docker Compose
+You can use Docker Compose to easily spin up the application along with a local MongoDB container.
+```bash
+docker-compose build
+docker-compose up
+
+# test the application
+curl localhost:3000/user
+```
 
 ## Decisions
+- **Dockerization:** Normally I would use the slimmest DOcker images as possible (node-alpine, for example), but I did not want to start dealing with installing Python and other depdendencies of node-gyp. So in this case, I used `node:10`.
+
 - **Avatar storage:** As the instructions state "pick a way of storing you think is most efficient", I decided to simply accept URLs which will be stored as a string in the database. This results in zero maintenance and replication overhead.
 
   There are two disadvantages though:

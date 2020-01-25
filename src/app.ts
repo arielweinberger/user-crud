@@ -7,20 +7,30 @@ import logger from './lib/logger';
 import setupUsersModule from './user/setup';
 
 async function initialize(): Promise<void> {
-  logger.info('Initializing User CRUD application...');
+  logger.info('Initializing User CRUD application...TEST');
 
   try {
-    await mongoose.connect('mongodb://localhost/crud', { useNewUrlParser: true, useUnifiedTopology: true });
+    const db = process.env.WITH_DOCKER ? 'mongodb://mongo/crud' : 'mongodb://localhost/crud';
+    logger.info(`Connecting to database "${db}"`);
+    await mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true });
   } catch (error) {
     logger.error(error);
     throw new Error('Cannot connect to MongoDB database');
   }
 
   const app: Application = express();
-  app.use(expressRequestId);
+
+  app.use(expressRequestId());
+
+  app.use((req, res, next) => {
+    console.log('REQUEST INOMING');
+    next();
+  });
+
   app.use('/static', express.static(`${__dirname}/public`));
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }))
+
   setupUsersModule(app);
 
   const port = process.env.PORT || 3000;
