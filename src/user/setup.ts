@@ -1,5 +1,6 @@
 import { Application, Router } from 'express';
 
+import logger from '../lib/logger';
 import {
   getAllUsers,
   getUser,
@@ -13,6 +14,8 @@ import {
 import handleValidationResult from '../util/handleValidationResult';
 
 export default function setupUsersModule(app: Application) {
+  logger.info(`Setting up User module`);
+
   const router: Router = Router();
 
   router.get('/', getAllUsers);
@@ -22,4 +25,6 @@ export default function setupUsersModule(app: Application) {
   router.patch('/:id/avatar', [idPathParamValidator, avatarValidator], handleValidationResult, setUserAvatar);
 
   app.use('/user', router);
+
+  logger.info(`User module set-up successfully`);
 }

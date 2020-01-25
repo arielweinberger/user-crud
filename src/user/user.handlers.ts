@@ -2,25 +2,31 @@ import { Request, Response } from 'express';
 import createError from 'http-errors';
 import bcrypt from 'bcryptjs';
 
-import User, { IUserModel } from "./user.model";
+import logger from '../lib/logger';
+import User, { IUserModel } from './user.model';
 
 export async function getAllUsers(req: Request, res: Response) {
+  logger.info('Incoming request for retrieving all users');
+
   try {
     const users: IUserModel[] = await User.find();
     res.status(200).json(users);
   } catch (error) {
+    logger.error('Retrieving all users has failed', req.id, error);
     return res.status(500).send();
   }
 }
 
 export async function getUser(req: Request, res: Response) {
   const { id } = req.params;
+  logger.info(`Incoming request for retrieving user with ID "${id}"`);
 
   let user: IUserModel;
 
   try {
     user = await User.findOne({ _id: id });
   } catch (error) {
+    logger.error('Retrieving a user has failed', { id }, req.id, error);
     return res.status(500).send();
   }
 
@@ -42,7 +48,7 @@ export async function createUser(req: Request, res: Response) {
     const salt: string = await bcrypt.genSalt(10);
     hashedPassword = await bcrypt.hash(password, salt);
   } catch (error) {
-    console.log('bcrypt password encryption failed');
+    logger.error('bcrypt password encryption failed', req.id, error);
     return res.status(500).send();
   }
 
@@ -60,6 +66,8 @@ export async function createUser(req: Request, res: Response) {
     if (error.code === 11000) {
       return res.status(409).json(new createError.Conflict('Username already taken'));
     } else {
+      // NOTE: Do not panic, user.toJSON() will exclude the password from the logs
+      logger.error('Saving user after creation has failed', { user: user.toJSON() }, req.id, error);
       return res.status(500).send();
     }
   }
@@ -89,6 +97,7 @@ export async function setUserAvatar(req: Request, res: Response) {
   try {
     user = await User.findOne({ _id: id });
   } catch (error) {
+    logger.error('Retrieving a user has failed', { id }, req.id, error);
     return res.status(500).send();
   }
 
@@ -103,6 +112,7 @@ export async function setUserAvatar(req: Request, res: Response) {
   try {
     await user.save();
   } catch (error) {
+    logger.error('Saving a user after avatar update has failed', { userId: id, avatarUrl: url }, req.id, error);
     return res.status(500).send();
   }
 

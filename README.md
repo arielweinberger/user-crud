@@ -29,4 +29,8 @@
 
 - **Logging:** The application features one log level. In a production-ready application I would include several levels of verbosity (environment-dependant) and possibly external logging services for alerts.
 
+  For logging, I chose to go for structured logs with Bunyan. There is a wide variety of loggers out there, and I don't have any strong preference.
+
+  I did my best to include the relevant request parameters as well as a unique request ID per log, as this is what I would do in a real application. Although in a real application I would most likely create a middleware to simplify the API of logging errors, as this one can easily get over-bloated.
+
 - **Run mode:** The application runs in development mode. In a production-ready application I would set up configurations for different environments, and utilise environment variables.
