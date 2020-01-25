@@ -27,7 +27,7 @@ Example request for avatar setting:
 // PATCH http://localhost:3000/5e2cd0a54cf1b50012ed30c6/avatar
 
 {
-  "url": "hhttps://via.placeholder.com/150x150.png"
+  "url": "https://via.placeholder.com/150x150.png"
 }
 ```
 
