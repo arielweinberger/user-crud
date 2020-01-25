@@ -1,5 +1,6 @@
-import { Request, Response } from "express";
-import createError from "http-errors";
+import { Request, Response } from 'express';
+import createError from 'http-errors';
+import bcrypt from 'bcryptjs';
 
 import User, { IUserModel } from "./user.model";
 
@@ -35,11 +36,21 @@ export async function getUser(req: Request, res: Response) {
 export async function createUser(req: Request, res: Response) {
   const { firstName, lastName, userName, password } = req.body;
 
+  let hashedPassword: string;
+  
+  try {
+    const salt: string = await bcrypt.genSalt(10);
+    hashedPassword = await bcrypt.hash(password, salt);
+  } catch (error) {
+    console.log('bcrypt password encryption failed');
+    return res.status(500).send();
+  }
+
   const user: IUserModel = new User({
     firstName,
     lastName,
     userName,
-    password,
+    password: hashedPassword,
     avatar: null
   });
 

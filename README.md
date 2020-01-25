@@ -25,6 +25,8 @@
 
 - **Password:** Password strength enforcement has not been implemented on purpose (time), although this can easily be done using regular expressions.
 
+  For encryption, I chose to use bcrypt. I like it because it's simple, and features unique salts per user which is a very strong defense compared to a single hash for all users.
+
 - **Logging:** The application features one log level. In a production-ready application I would include several levels of verbosity (environment-dependant) and possibly external logging services for alerts.
 
 - **Run mode:** The application runs in development mode. In a production-ready application I would set up configurations for different environments, and utilise environment variables.
