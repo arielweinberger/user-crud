@@ -1,5 +1,4 @@
 import { Application, Router } from 'express';
-import { checkSchema, validationResult } from 'express-validator';
 
 import {
   getAllUsers,
@@ -9,18 +8,18 @@ import {
   setUserAvatar
 } from './user.handlers';
 import {
-  getUserSchema,
-} from './user.schemas';
+  idPathParamValidator, createUserValidator, avatarValidator,
+} from './validators';
 import handleValidationResult from '../util/handleValidationResult';
 
 export default function setupUsersModule(app: Application) {
   const router: Router = Router();
 
   router.get('/', getAllUsers);
-  router.get('/:id', checkSchema(getUserSchema), handleValidationResult, getUser);
-  router.post('/', createUser);
-  router.delete('/:id', deleteUser);
-  router.patch('/:id/avatar', setUserAvatar);
+  router.get('/:id', idPathParamValidator, handleValidationResult, getUser);
+  router.post('/', createUserValidator, handleValidationResult, createUser);
+  router.delete('/:id', idPathParamValidator, handleValidationResult, deleteUser);
+  router.patch('/:id/avatar', [idPathParamValidator, avatarValidator], handleValidationResult, setUserAvatar);
 
   app.use('/user', router);
 }

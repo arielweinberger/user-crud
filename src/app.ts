@@ -8,7 +8,7 @@ async function initialize(): Promise<void> {
   try {
     await mongoose.connect('mongodb://localhost/crud', { useNewUrlParser: true, useUnifiedTopology: true });
   } catch (err) {
-    console.log('TODO: db conn error');
+    throw new Error('Cannot connect to MongoDB database');
   }
 
   const app: Application = express();
