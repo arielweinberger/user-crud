@@ -50,7 +50,7 @@ curl localhost:3000/user
 ```
 
 ## Decisions
-- **Dockerization:** Normally I would use the slimmest DOcker images as possible (node-alpine, for example), but I did not want to start dealing with installing Python and other depdendencies of node-gyp. So in this case, I used `node:10`.
+- **Dockerization:** Normally I would use the slimmest Docker images possible (node-alpine, for example), but I did not want to start dealing with installing Python and other depdendencies of node-gyp. So in this case, I used `node:10`.
 
 - **Avatar storage:** As the instructions state "pick a way of storing you think is most efficient", I decided to simply accept URLs which will be stored as a string in the database. This results in zero maintenance and replication overhead.
 
