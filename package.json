@@ -1,0 +1,8 @@
+{
+  "name": "user-crud",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:arielweinberger/user-crud.git",
+  "author": "Ariel Weinberger <weinberger.ariel@gmail.com>",
+  "license": "MIT"
+}
