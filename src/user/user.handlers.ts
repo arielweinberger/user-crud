@@ -53,7 +53,7 @@ export async function createUser(req: Request, res: Response) {
     }
   }
 
-  res.status(201).send();
+  res.status(201).send(user.toJSON());
 }
 
 export async function deleteUser(req: Request, res: Response) {
