@@ -4,13 +4,24 @@ import createError from "http-errors";
 import User, { IUserModel } from "./user.model";
 
 export async function getAllUsers(req: Request, res: Response) {
-  const users: IUserModel[] = await User.find();
-  res.status(200).json(users);
+  try {
+    const users: IUserModel[] = await User.find();
+    res.status(200).json(users);
+  } catch (error) {
+    return res.status(500).send();
+  }
 }
 
 export async function getUser(req: Request, res: Response) {
   const { id } = req.params;
-  const user: IUserModel = await User.findOne({ _id: id });
+
+  let user: IUserModel;
+
+  try {
+    user = await User.findOne({ _id: id });
+  } catch (error) {
+    return res.status(500).send();
+  }
 
   if (!user) {
     return res
@@ -35,11 +46,14 @@ export async function createUser(req: Request, res: Response) {
   try {
     await user.save();
   } catch (error) {
-    console.log("TODO: handle error");
-    res.sendStatus(500);
+    if (error.code === 11000) {
+      return res.status(409).json(new createError.Conflict('Username already taken'));
+    } else {
+      return res.status(500).send();
+    }
   }
 
-  res.sendStatus(201);
+  res.status(201).send();
 }
 
 export async function deleteUser(req: Request, res: Response) {
@@ -52,16 +66,20 @@ export async function deleteUser(req: Request, res: Response) {
       .json(new createError.NotFound(`User with ID "${id}" not found`));
   }
 
-  res.sendStatus(200);
+  res.status(200).send();
 }
 
 export async function setUserAvatar(req: Request, res: Response) {
   const { id } = req.params;
   const { url } = req.body;
 
-  // TODO: validate URL schema
+  let user: IUserModel;
 
-  const user: IUserModel = await User.findOne({ _id: id });
+  try {
+    user = await User.findOne({ _id: id });
+  } catch (error) {
+    return res.status(500).send();
+  }
 
   if (!user) {
     return res
@@ -74,9 +92,8 @@ export async function setUserAvatar(req: Request, res: Response) {
   try {
     await user.save();
   } catch (error) {
-    console.log("TOOD: handle error");
-    res.sendStatus(500);
+    return res.status(500).send();
   }
 
-  res.sendStatus(200);
+  res.status(200).send();
 }
