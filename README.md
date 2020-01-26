@@ -73,6 +73,8 @@ After performing this assignment, I realized that the JS community is moving ver
 
 - **Project structure:** I tried to minimize over-engineering, but at the same time demonstrate the structure of a Node.js application that is comfortable to built upon and scale. This resembles of the Controller/Service pattern. There are API handlers which only deal with HTTP request handling, and the service which perform the heavy business logic. I would consider choosing a framework such as NestJS (based on Express) which makes this a lot easier to build/maintain and especially easier to test.
 
+- **Error handliing** seems to be decently covered. I couldn't think of anything else within this context.
+
 - **Persistence:** I chose to go for MongoDB with Mongoose, just because it's simple to get started. The implementation is easy. A good alternative would be any relational database with TypeORM.
 
 - **Password:** Password strength enforcement has not been implemented on purpose (time), although this can easily be done using regular expressions.
