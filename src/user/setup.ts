@@ -2,11 +2,11 @@ import { Application, Router } from 'express';
 
 import logger from '../lib/logger';
 import {
-  getAllUsers,
-  getUser,
-  createUser,
-  deleteUser,
-  setUserAvatar
+  handleGetAllUsers,
+  handleGetUser,
+  handleCreateUser,
+  handleDeleteUser,
+  handleSetUserAvatar,
 } from './user.handlers';
 import {
   idPathParamValidator,
@@ -20,11 +20,11 @@ export default function setupUsersModule(app: Application) {
 
   const router: Router = Router();
 
-  router.get('/', getAllUsers);
-  router.get('/:id', [idPathParamValidator, handleValidationResult], getUser);
-  router.post('/', [...createUserValidators, handleValidationResult], createUser);
-  router.delete('/:id', [idPathParamValidator, handleValidationResult], deleteUser);
-  router.patch('/:id/avatar', [idPathParamValidator, avatarValidator], handleValidationResult, setUserAvatar);
+  router.get('/', handleGetAllUsers);
+  router.get('/:id', [idPathParamValidator, handleValidationResult], handleGetUser);
+  router.post('/', [...createUserValidators, handleValidationResult], handleCreateUser);
+  router.delete('/:id', [idPathParamValidator, handleValidationResult], handleDeleteUser);
+  router.patch('/:id/avatar', [idPathParamValidator, avatarValidator], handleValidationResult, handleSetUserAvatar);
 
   app.use('/user', router);
 

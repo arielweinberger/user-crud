@@ -1,120 +1,82 @@
 import { Request, Response } from 'express';
 import createError from 'http-errors';
-import bcrypt from 'bcryptjs';
 
 import logger from '../lib/logger';
-import User, { IUserModel } from './user.model';
+import { IUserModel } from './user.model';
+import * as UserService from './user.service';
 
-export async function getAllUsers(req: Request, res: Response) {
-  logger.info('Incoming request for retrieving all users');
+export async function handleGetAllUsers(req: Request, res: Response) {
+  logger.info('Incoming request for retrieving all users', {}, req.id);
 
   try {
-    const users: IUserModel[] = await User.find();
-    res.status(200).json(users);
+    const users: IUserModel[] = await UserService.getAllUsers();
+    return res.status(200).json(users);
   } catch (error) {
-    logger.error('Retrieving all users has failed', req.id, error);
-    return res.status(500).send();
+    logger.error(error, {}, req.id);
+    return res.status(error.statusCode).send();
   }
 }
 
-export async function getUser(req: Request, res: Response) {
+export async function handleGetUser(req: Request, res: Response) {
   const { id } = req.params;
-  logger.info(`Incoming request for retrieving user with ID "${id}"`);
+  logger.info(`Incoming request for retrieving a user`, { id }, req.id);
 
   let user: IUserModel;
 
   try {
-    user = await User.findOne({ _id: id });
+    user = await UserService.getUserById(id);
   } catch (error) {
     logger.error('Retrieving a user has failed', { id }, req.id, error);
-    return res.status(500).send();
+    return res.status(error.statusCode).send();
   }
 
   if (!user) {
-    return res
-      .status(404)
-      .json(new createError.NotFound(`User with ID "${id}" not found`));
+    return res.status(404).json(new createError.NotFound(`User with ID "${id}" not found`));
   }
 
-  res.status(200).json(user);
+  return res.status(200).json(user);
 }
 
-export async function createUser(req: Request, res: Response) {
-  const { firstName, lastName, userName, password } = req.body;
+export async function handleCreateUser(req: Request, res: Response) {
+  const safeUserData = { ...req.body };
+  delete safeUserData.password;
 
-  let hashedPassword: string;
-
-  try {
-    const salt: string = await bcrypt.genSalt(10);
-    hashedPassword = await bcrypt.hash(password, salt);
-  } catch (error) {
-    logger.error('bcrypt password encryption failed', req.id, error);
-    return res.status(500).send();
-  }
-
-  const user: IUserModel = new User({
-    firstName,
-    lastName,
-    userName,
-    password: hashedPassword,
-    avatar: null
-  });
+  logger.info('Incoming request for user creation', { userData: safeUserData }, req.id);
 
   try {
-    await user.save();
+    const user: IUserModel = await UserService.createUser(req.body);
+    return res.status(201).json(user);
   } catch (error) {
-    if (error.code === 11000) {
-      return res.status(409).json(new createError.Conflict('Username already taken'));
-    } else {
-      // NOTE: Do not panic, user.toJSON() will exclude the password from the logs
-      logger.error('Saving user after creation has failed', { user: user.toJSON() }, req.id, error);
-      return res.status(500).send();
-    }
+    logger.error(error, { userData: safeUserData }, req.id);
+    return res.status(error.statusCode).json(error);
   }
-
-  res.status(201).send(user.toJSON());
 }
 
-export async function deleteUser(req: Request, res: Response) {
+export async function handleDeleteUser(req: Request, res: Response) {
   const { id } = req.params;
-  const result = await User.deleteOne({ _id: id });
 
-  if (!result.deletedCount) {
-    return res
-      .status(404)
-      .json(new createError.NotFound(`User with ID "${id}" not found`));
+  logger.info('Incoming request for user deletion', { id }, req.id);
+
+  try {
+    await UserService.deleteUser(id);
+    return res.status(200).send();
+  } catch (error) {
+    logger.error(error, { id }, req.id);
+    return res.status(error.statusCode).json(error);
   }
-
-  res.status(200).send();
 }
 
-export async function setUserAvatar(req: Request, res: Response) {
+export async function handleSetUserAvatar(req: Request, res: Response) {
   const { id } = req.params;
   const { url } = req.body;
 
-  let user: IUserModel;
+  logger.info('Incoming request for avatar setting', { id, url }, req.id);
 
   try {
-    user = await User.findOne({ _id: id });
+    await UserService.setUserAvatar(id, url);
+    return res.status(200).send();
   } catch (error) {
-    logger.error('Retrieving a user has failed', { id }, req.id, error);
-    return res.status(500).send();
+    logger.error(error, { id, url }, req.id);
+    return res.status(error.statusCode).json(error);
   }
-
-  if (!user) {
-    return res
-      .status(404)
-      .json(new createError.NotFound(`User with ID "${id}" not found`));
-  }
-
-  user.avatar = url;
-
-  try {
-    await user.save();
-  } catch (error) {
-    logger.error('Saving a user after avatar update has failed', { userId: id, avatarUrl: url }, req.id, error);
-    return res.status(500).send();
-  }
-
-  res.status(200).send();
 }

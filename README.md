@@ -49,6 +49,13 @@ docker-compose up
 curl localhost:3000/user
 ```
 
+## Conclusions
+* After performing this assignment, I realized that the JS community is moving very fast toward TypeScript, yet traditional tools are still widely used. These tools are not well-adapted to use TypeScript. This can especially be felt when performing tests. Good examples are Mongoose and barebones Express.
+
+Using modern TypeScript technologies (NestJS, TypeORM etc) makes Node development and testing a breeze.
+
+* 
+
 ## Decisions
 - **Dockerization:** Normally I would use the slimmest Docker images possible (node-alpine, for example), but I did not want to start dealing with installing Python and other depdendencies of node-gyp. So in this case, I used `node:10`.
 
@@ -66,7 +73,7 @@ curl localhost:3000/user
   - Base64 storage in the database is an okay option if we limit the avatars to a sensible size. However, these are quite long. Same replication challenges as #1 are present, although there are plenty of common tools that help with read replicas for databases. Still, very expensive.
   - An external reliable avatar service service such as Gravatar. The downside is, it requires integration (minor) and requires users to sign up to an external service (major).
 
-- **Project structure:** I tried to minimize over-engineering, but at the same time demonstrate the structure of a Node.js application that is comfortable to built upon and scale. At the beginning I was considering using the Controller/Service pattern to achieve a nice abstraction between the API layer and the business logic, but figured it will be an overkill. If I go for this approach, I would choose a framework such as NestJS (based on Express) which makes this a lot easier to build/maintain and especially easier to test.
+- **Project structure:** I tried to minimize over-engineering, but at the same time demonstrate the structure of a Node.js application that is comfortable to built upon and scale. This resembles of the Controller/Service pattern. There are API handlers which only deal with HTTP request handling, and the service which perform the heavy business logic. I would consider choosing a framework such as NestJS (based on Express) which makes this a lot easier to build/maintain and especially easier to test.
 
 - **Persistence:** I chose to go for MongoDB with Mongoose, just because it's simple to get started. The implementation is easy. A good alternative would be any relational database with TypeORM.
 
