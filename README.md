@@ -50,11 +50,9 @@ curl localhost:3000/user
 ```
 
 ## Conclusions
-* After performing this assignment, I realized that the JS community is moving very fast toward TypeScript, yet traditional tools are still widely used. These tools are not well-adapted to use TypeScript. This can especially be felt when performing tests. Good examples are Mongoose and barebones Express.
+I ended up a total of around 6 hours on this assignment.
 
-Using modern TypeScript technologies (NestJS, TypeORM etc) makes Node development and testing a breeze.
-
-* 
+After performing this assignment, I realized that the JS community is moving very fast toward TypeScript, yet traditional tools are still widely used. These tools are not well-adapted to use TypeScript. This can especially be felt when performing tests. Good examples are Mongoose and barebones Express which are very hard to interface with testing frameworks. Using TypeScript-era tooling makes testing a lot easier.
 
 ## Decisions
 - **Dockerization:** Normally I would use the slimmest Docker images possible (node-alpine, for example), but I did not want to start dealing with installing Python and other depdendencies of node-gyp. So in this case, I used `node:10`.
