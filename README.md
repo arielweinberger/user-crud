@@ -50,7 +50,7 @@ curl localhost:3000/user
 ```
 
 ## Conclusions
-I ended up a total of around 6 hours on this assignment.
+I ended up spending a total of around 6 hours on this assignment.
 
 After performing this assignment, I realized that the JS community is moving very fast toward TypeScript, yet traditional tools are still widely used. These tools are not well-adapted to use TypeScript. This can especially be felt when performing tests. Good examples are Mongoose and barebones Express which are very hard to interface with testing frameworks. Using TypeScript-era tooling makes testing a lot easier.
 
