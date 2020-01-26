@@ -87,4 +87,4 @@ curl localhost:3000/user
   Here are some examples of repositories where I've written tests to the best of my ability:
   * [nestjs-course-task-management](https://github.com/arielweinberger/nestjs-course-task-management/tree/testing/10-testing-jwt-strategy/src): The GitHub repository of my Udemy course project. Decently covered with tests - services, repositories, controllers and utility functions. This uses TypeScript with Jest.
   * [stocks-assessment](https://github.com/arielweinberger/stocks-assessment/tree/master/server/src/spec): Back-end server for an assignment I did two years ago, with full coverage (using Jasmine).
-  * [stocks-assessment](https://github.com/arielweinberger/stocks-assessment/tree/master/client/src/app): The front-end application (Angular) of the same application, with full coverage.
+  * [stocks-assessment](https://github.com/arielweinberger/stocks-assessment/tree/master/client/src/app): The front-end application (Angular) for the same application, with full coverage.

@@ -24,7 +24,9 @@ const createUserValidators = [
     .withMessage('Must be between 6 and 50 characters long')
 ];
 
-const avatarValidator = body('url').isURL();
+const avatarValidator = body('url')
+  .isURL()
+  .withMessage('Must be a valid URL');
 
 export {
   idPathParamValidator,
