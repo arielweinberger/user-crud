@@ -43,7 +43,7 @@ export async function createUser(req: Request, res: Response) {
   const { firstName, lastName, userName, password } = req.body;
 
   let hashedPassword: string;
-  
+
   try {
     const salt: string = await bcrypt.genSalt(10);
     hashedPassword = await bcrypt.hash(password, salt);

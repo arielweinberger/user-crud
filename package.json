@@ -7,7 +7,9 @@
   "license": "MIT",
   "scripts": {
     "start:dev": "nodemon",
-    "start:prod": "ts-node --files src/app.ts"
+    "start:prod": "ts-node --files src/app.ts",
+    "test": "jest",
+    "lint": "tslint -p tsconfig.json -c tslint.json"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -24,8 +26,10 @@
     "@types/http-errors": "^1.6.3",
     "@types/mongoose": "^5.5.43",
     "@types/node": "^13.5.0",
+    "jest": "^25.1.0",
     "nodemon": "^2.0.2",
     "ts-node": "^8.6.2",
+    "tslint": "^6.0.0",
     "typescript": "^3.7.5"
   }
 }

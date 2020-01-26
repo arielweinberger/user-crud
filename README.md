@@ -66,7 +66,7 @@ curl localhost:3000/user
   - Base64 storage in the database is an okay option if we limit the avatars to a sensible size. However, these are quite long. Same replication challenges as #1 are present, although there are plenty of common tools that help with read replicas for databases. Still, very expensive.
   - An external reliable avatar service service such as Gravatar. The downside is, it requires integration (minor) and requires users to sign up to an external service (major).
 
-- **Project structure:** I tried to minimize over-engineering, but at the same time demonstrate the structure of a Node.js application that is comfortable to built upon and scale.
+- **Project structure:** I tried to minimize over-engineering, but at the same time demonstrate the structure of a Node.js application that is comfortable to built upon and scale. At the beginning I was considering using the Controller/Service pattern to achieve a nice abstraction between the API layer and the business logic, but figured it will be an overkill. If I go for this approach, I would choose a framework such as NestJS (based on Express) which makes this a lot easier to build/maintain and especially easier to test.
 
 - **Persistence:** I chose to go for MongoDB with Mongoose, just because it's simple to get started. The implementation is easy. A good alternative would be any relational database with TypeORM.
 
@@ -81,3 +81,10 @@ curl localhost:3000/user
   I did my best to include the relevant request parameters as well as a unique request ID per log, as this is what I would do in a real application. Although in a real application I would most likely create a middleware to simplify the API of logging errors, as this one can easily get over-bloated.
 
 - **Run mode:** The application runs in development mode. In a production-ready application I would set up configurations for different environments, and utilise environment variables.
+
+- **Testing:** Due to limited time, I did not cover the application with tests. However, I feel very comfortable writing tests in multiple technologies. This has been an integral part of my work for the past years.
+
+  Here are some examples of repositories where I've written tests to the best of my ability:
+  * [nestjs-course-task-management](https://github.com/arielweinberger/nestjs-course-task-management/tree/testing/10-testing-jwt-strategy/src): The GitHub repository of my Udemy course project. Decently covered with tests - services, repositories, controllers and utility functions. This uses TypeScript with Jest.
+  * [stocks-assessment](https://github.com/arielweinberger/stocks-assessment/tree/master/server/src/spec): Back-end server for an assignment I did two years ago, with full coverage (using Jasmine).
+  * [stocks-assessment](https://github.com/arielweinberger/stocks-assessment/tree/master/client/src/app): The front-end application (Angular) of the same application, with full coverage.

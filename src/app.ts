@@ -20,16 +20,10 @@ async function initialize(): Promise<void> {
 
   const app: Application = express();
 
-  app.use(expressRequestId());
-
-  app.use((req, res, next) => {
-    console.log('REQUEST INOMING');
-    next();
-  });
-
   app.use('/static', express.static(`${__dirname}/public`));
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }))
+  app.use(expressRequestId());
 
   setupUsersModule(app);
 
