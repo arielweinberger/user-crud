@@ -5,7 +5,7 @@ const idPathParamValidator = param('id')
   .custom(value => mongoose.Types.ObjectId.isValid(value))
   .withMessage('must be a valid ObjectId');
 
-const createUserValidator = [
+const createUserValidators = [
   body('firstName')
     .isAlpha('en-GB')
     .withMessage('Must be alphabetic (en)')
@@ -28,6 +28,6 @@ const avatarValidator = body('url').isURL();
 
 export {
   idPathParamValidator,
-  createUserValidator,
+  createUserValidators,
   avatarValidator
 };

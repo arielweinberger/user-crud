@@ -9,7 +9,9 @@ import {
   setUserAvatar
 } from './user.handlers';
 import {
-  idPathParamValidator, createUserValidator, avatarValidator,
+  idPathParamValidator,
+  createUserValidators,
+  avatarValidator
 } from './validators';
 import handleValidationResult from '../util/handleValidationResult';
 
@@ -19,9 +21,9 @@ export default function setupUsersModule(app: Application) {
   const router: Router = Router();
 
   router.get('/', getAllUsers);
-  router.get('/:id', idPathParamValidator, handleValidationResult, getUser);
-  router.post('/', createUserValidator, handleValidationResult, createUser);
-  router.delete('/:id', idPathParamValidator, handleValidationResult, deleteUser);
+  router.get('/:id', [idPathParamValidator, handleValidationResult], getUser);
+  router.post('/', [...createUserValidators, handleValidationResult], createUser);
+  router.delete('/:id', [idPathParamValidator, handleValidationResult], deleteUser);
   router.patch('/:id/avatar', [idPathParamValidator, avatarValidator], handleValidationResult, setUserAvatar);
 
   app.use('/user', router);
